@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="/layui/css/layui.css"  media="all">
+    <meta charset="utf-8">
+    <title>管理账户</title>
+    <th:block th:include="header.html :: header"></th:block>
+</head>
+
+<body bgcolor="#f0f0f5">
+<div class="layui-container" style="height: 50px;width: 1150px;" ></div>
+  <div class="layui-container" style="width: 1150px;" >
+     <div class="layui-card">
+
+        <center>
+            <div class="layui-card-header " >
+            <h3>管理账户</h3>
+            </div>
+        </center></br>
+
+
+         <div class="layui-form-item" >
+
+                 <div class="layui-input-inline">
+
+                     <input onautocomplete="off" id="find" name="find"
+                            placeholder="输入ID" class="layui-input">
+                 </div>
+
+                 <button  class="layui-btn " lay-submit lay-filter="queryUser" onautocomplete="off">
+                     <i class="layui-icon layui-icon-search" >搜索</i>
+                 </button>
+
+             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                 <a href="/add">
+                   <button  class="layui-btn layui-btn-primary " >
+                      <i class="layui-icon layui-icon-addition" >添加</i>
+                   </button>
+                 </a>
+
+         </div>
+
+
+         <!--表格-->
+         <table class="layui-hide" id="tab"  lay-filter="tab"></table>
+
+
+     </div>
+  </div>
+</body>
+
+<script src="/jquery-3.6.0/jquery-3.6.0.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">修改简介</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<script type="text/javascript" th:inline="none">
+
+    layui.use('table', function(){
+        var table = layui.table;
+
+        table.render({
+            elem: '#tab'
+            ,url:'/tabs'
+            ,page: true
+            ,limits: [3,5,7]
+            ,limit: 7
+            ,id: 'tab'
+            , parseData: function (res) { //将原始数据解析成 table 组件所规定的数据，res为从url中get到的数据
+                var result;
+                if (this.page.curr) {
+                    result = res.data.slice(this.limit * (this.page.curr - 1), this.limit * this.page.curr);
+                }
+                else {
+                    result = res.data.slice(0, this.limit);
+                }
+                return {
+                    "code": res.code, //解析接口状态
+                    "msg": res.msg, //解析提示文本
+                    "count": res.count, //解析数据长度
+                    "data": result //解析数据列表
+                };
+            }
+            ,cols: [[
+                {field:'id', width:60, title: 'ID'}
+                ,{field:'username', width:90, title: '用户名'}
+                ,{field:'nickname', width:90, title: '昵称'}
+                ,{field:'sex', width:60, title: '性别'}
+                ,{field:'birthday', width:120, title: '生日' ,templet:'<div>{{ layui.util.toDateString(d.birthday, "yyyy-MM-dd") }}</div>'}
+                ,{field:'phone', title: '手机号', width: 130}
+                ,{field:'email', width:190, title: '邮箱'}
+                ,{field:'profile', minwidth: 170, title: '个人简介'}
+                ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:150}
+            ]]
+
+        });
+
+        table.on('tool(tab)', function(obj){
+            var data = obj.data;
+            console.log(obj)
+            if(obj.event === 'del'){
+                layer.confirm('确定删除此用户吗？', function(index){
+                    obj.del();
+                    layer.close(index);
+                    window.location.href = "/dele/"+data.id;
+                });
+            } else if(obj.event === 'edit'){
+                layer.prompt({
+                    formType: 2
+                    ,value: data.profile
+                }, function(value, index){
+                    obj.update({
+                        email: value
+                    });
+                    layer.close(index);
+                    window.location.href = "/modi/"+data.id+"/"+value;
+                });
+            }
+        });
+
+        layui.use('form', function(){
+            var form = layui.form;
+
+            form.on('submit(queryUser)', function(data){
+                //var field = data.field;
+                var find=$("#find").val();
+                console.log(find)
+
+                table.reload('tab', {
+                    where: {id:find}
+                });
+            });
+        });
+    });
+</script>
+
+</html>

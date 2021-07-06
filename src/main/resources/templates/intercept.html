@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="/layui/css/layui.css"  media="all">
+    <meta charset="utf-8">
+    <title>提示</title>
+    <th:block th:include="header.html :: header"></th:block>
+</head>
+
+<body bgcolor="#f0f0f5">
+<div class="layui-container" style="height: 200px;width: 600px;" ></div>
+<div class="layui-container" style="height: 150px;width: 600px;" >
+    <div class="layui-tab-card">
+        <center><i style="color:#009688;" class="layui-icon layui-icon-tips"></i>
+            <font size="3" color="#393D49">该页面未登录不可访问，请先登录！</font>
+        </center>
+    </div>
+
+</div>
+</body>
+<script type="text/javascript">
+    onload=function(){
+        setTimeout(go, 1700);
+    };
+    function go(){
+        location.href="/login";
+    }
+</script>
+
+<script src="/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    layui.use('element', function(){
+    });
+</script>
+<script>
+    layui.use('form', function(){
+        var form = layui.form;
+    });
+</script>
+</html>

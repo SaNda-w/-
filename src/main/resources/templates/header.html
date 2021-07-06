@@ -1,0 +1,36 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="header">
+    <div class="layui-header">
+        <ul class="layui-nav  layui-bg-green" lay-filter="">
+            <li class="layui-nav-item">
+               <h3> <strong>简单账户管理</strong></h3>
+            </li>
+
+            &nbsp;&nbsp;
+
+            <li class="layui-nav-item" th:if="${session.user==null}">
+                <a href="/login"><i class="layui-icon layui-icon-right"></i>登录</a>
+            </li>
+
+            <li class="layui-nav-item" th:if="${session.user==null}">
+                <a href="/regi"><i class="layui-icon layui-icon-add-circle"></i>注册</a>
+            </li>
+
+            <li class="layui-nav-item" th:if="${session.user!=null}">
+                <a th:href="'/edit/'+${session.user.getId()}"><i class="layui-icon layui-icon-read">个人信息</i></a>
+            </li>
+
+            <li class="layui-nav-item" th:if="${session.user!=null}">
+                <a href="/manager"><i class="layui-icon layui-icon-set-fill">管理账户</i></a>
+            </li>}
+
+            <li class="layui-nav-item" th:if="${session.user!=null}">
+                <a href=""><i class="layui-icon layui-icon-friends" style="font-size: 17px"></i><span th:text="${session.user.getUsername()}"></span></a>
+                <dl class="layui-nav-child">
+                    <dd><a href="/logout">退出</a></dd>
+                </dl>
+            </li>
+
+        </ul>
+    </div>
+</div>

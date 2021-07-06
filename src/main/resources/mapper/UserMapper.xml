@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jin.acc.mapper.UserMapper">
+
+    <select id="getAllUser" resultType="com.jin.acc.entity.User">
+        select * from user order by id
+    </select>
+
+    <insert id="addUser" parameterType="com.jin.acc.entity.User" >
+        insert into `user` (id,username,password,email,phone,birthday,profile,sex,nickname)
+        values(#{id},#{username},#{password},#{email},#{phone},#{birthday},#{profile},#{sex},#{nickname})
+    </insert>
+
+    <select id="getUserByName" parameterType="String" resultType="com.jin.acc.entity.User">
+        select * from `user` where username = #{username}
+    </select>
+
+    <delete id="deleUserById" parameterType="Integer">
+        delete from `user`  WHERE id=#{id}
+    </delete>
+
+    <select id="getUserById" parameterType="Integer" resultType="com.jin.acc.entity.User">
+        select * from `user` where id = #{id}
+    </select>
+
+    <select id="getmaxUserId" resultType="Integer">
+        select Max(id) from `user`
+    </select>
+
+
+    <select id="getUserCount" resultType="Integer">
+        select count(*) from `user`
+    </select>
+
+    <update id="modifyUserById" parameterType="com.jin.acc.entity.User">
+        update User
+        <set>
+        password= #{password},
+        email=#{email},
+        phone=#{phone},
+        birthday=#{birthday},
+        profile=#{profile},
+        sex=#{sex},
+        nickname=#{nickname}
+        </set>
+        where id= #{id}
+    </update>
+
+</mapper>
